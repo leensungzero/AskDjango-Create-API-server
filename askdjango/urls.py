@@ -23,4 +23,6 @@ urlpatterns = [
     path('ep04/', include('ep04.urls')),
     path('ep06/', include('ep06.urls')),
     path('ep08/', include('ep08.urls')),
+
+    path('api-auth/', include('rest_framework.urls')),
 ]
