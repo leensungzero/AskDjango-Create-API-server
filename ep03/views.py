@@ -96,10 +96,14 @@ class PostDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = PostSerializer
 
 
+from .pagination import PostPageNumberPagination
+
+
 # ViewSet
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
+    pagination_class = PostPageNumberPagination
 
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):

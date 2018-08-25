@@ -22,4 +22,5 @@ urlpatterns = [
     path('ep03/', include('ep03.urls')),
     path('ep04/', include('ep04.urls')),
     path('ep06/', include('ep06.urls')),
+    path('ep08/', include('ep08.urls')),
 ]
