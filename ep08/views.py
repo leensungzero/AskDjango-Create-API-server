@@ -1,3 +1,5 @@
+import json
+from django.http import HttpResponse
 from django.shortcuts import render
 from rest_framework import viewsets
 from .models import Post
@@ -51,7 +53,7 @@ class PostViewSet(viewsets.ModelViewSet):
 
         render_start = time.time()
 
-        response.render()
+        # response.render()
 
         self.render_time = time.time() - render_start
 
@@ -73,7 +75,7 @@ class PostViewSet(viewsets.ModelViewSet):
 
         data = cache.get('post_list_cache')
         if data is None:
-            data = self.queryset.values('author__username', 'message')
+            data = list(self.queryset.values('author__username', 'message'))
             cache.set('post_list_cache', data)
 
         self.db_time = time.time() - db_start
@@ -81,8 +83,7 @@ class PostViewSet(viewsets.ModelViewSet):
         self.serializer_time = 0 
 
 
-
-        return Response(data)
+        return HttpResponse(json.dumps(data), content_type='application/json; charset=utf8')
 
       
 
