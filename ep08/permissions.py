@@ -3,7 +3,7 @@ from rest_framework import permissions
 class IsAuthorUpdateOrReadonly(permissions.BasePermission):
     # 인증된 유저에 한해, 목록조회/포스팅등록을 허용
     def has_permission(self, request, view):
-        return request.user.is_authenticated\
+        return request.user.is_authenticated
 
     def has_object_permission(self, request, view, obj):
         # 조회 요청(GET, HEAD, OPTIONS) 에 대해서는 인증여부에 상관없이 허용
