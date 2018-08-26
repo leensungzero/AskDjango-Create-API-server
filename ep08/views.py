@@ -8,12 +8,27 @@ from django.core.signals import request_started, request_finished
 from django.core.cache import cache
 from rest_framework.response import Response
 
+from rest_framework.negotiation import BaseContentNegotiation
+from rest_framework.renderers import JSONRenderer
+
+class IgnoreClientContentNegotiation(BaseContentNegotiation):
+    def select_parser(self, request, parsers):
+        "Select the first parser in the '.parser_classes' list."
+        return parsers[0]
+
+    def select_renderer(self, request, renderers, format_suffix):
+        "Select the first renderer in the '.renderer_classes' list"
+        return (renderers[0], renderers[0].media_type)
 
 
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
     # permission_classes = [IsAuthorUpdateOrReadonly]
+    permission_classes = []
+    authentication_classes = []
+    renderer_classes = [JSONRenderer]
+    content_negotiation_class = IgnoreClientContentNegotiation
 
     def perform_create(self, serializer):
         serializer.save(
