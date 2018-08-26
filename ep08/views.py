@@ -5,7 +5,9 @@ from .serializers import PostSerializer
 from .permissions import IsAuthorUpdateOrReadonly
 import time
 from django.core.signals import request_started, request_finished
+from django.core.cache import cache
 from rest_framework.response import Response
+
 
 
 class PostViewSet(viewsets.ModelViewSet):
@@ -54,19 +56,13 @@ class PostViewSet(viewsets.ModelViewSet):
 
         db_start = time.time()
 
-        # post_list = list(self.queryset)
-        data = self.queryset.values('author__username', 'message')
+        data = cache.get('post_list_cache')
+        if data is None:
+            data = self.queryset.values('author__username', 'message')
+            cache.set('post_list_cache', data)
+
         self.db_time = time.time() - db_start
 
-
-
-        # serializer_start = time.time()
-
-        # serializer = self.get_serializer(self.queryset, many=True)
-
-        # data = serializer.data
-
-        # self.serializer_time = time.time() - serializer_start
         self.serializer_time = 0 
 
 
