@@ -54,19 +54,20 @@ class PostViewSet(viewsets.ModelViewSet):
 
         db_start = time.time()
 
-        post_list = list(self.queryset)
-
+        # post_list = list(self.queryset)
+        data = self.queryset.values('author__username', 'message')
         self.db_time = time.time() - db_start
 
 
 
-        serializer_start = time.time()
+        # serializer_start = time.time()
 
-        serializer = self.get_serializer(self.queryset, many=True)
+        # serializer = self.get_serializer(self.queryset, many=True)
 
-        data = serializer.data
+        # data = serializer.data
 
-        self.serializer_time = time.time() - serializer_start
+        # self.serializer_time = time.time() - serializer_start
+        self.serializer_time = 0 
 
 
 
@@ -93,7 +94,7 @@ def finished_fn(sender, **kwargs):
     total = cbv.db_time + cbv.serializer_time + cbv.api_view_time + cbv.render_time + request_response_time
 
 
-    print('Total                                                : {:.6f}s' .format(total))
+    print('Total                                : {:.6f}s' .format(total))
 
     print('Database Lookup    - db_time         : {:.6f}s, {:>4.1f}%'.format(cbv.db_time, 100*(cbv.db_time/total)))
 
